@@ -3,7 +3,7 @@ GO
 
 DELETE FROM Employee;
 DELETE FROM SeatingChart;
-DBCC CHECKIDENT ('SeatingChart', RESEED, 0);
+DBCC CHECKIDENT ('SeatingChart', RESEED, 1);
 GO
 
 INSERT INTO SeatingChart (FLOOR_NO, SEAT_NO) VALUES 
@@ -13,16 +13,16 @@ INSERT INTO SeatingChart (FLOOR_NO, SEAT_NO) VALUES
 (4, 1), (4, 2), (4, 3), (4, 4), (4, 5), (4, 6), (4, 7), (4, 8), (4, 9), (4, 10);
 
 INSERT INTO Employee (EMP_ID, NAME, EMAIL, FLOOR_SEAT_SEQ) VALUES 
-('00001', N'©P¿³­õ', 'eric@test.com', 40),  
-('00002', N'·¨¥àµY', 'rainie@test.com', 2),
-('00003', N'³¯ªüµØ', 'hua@test.com', 25),   
-('00004', N'½²¨ÌªL', 'lin@test.com', NULL),   
-('00005', N'©PªN­Û', 'jay@test.com', 14),
-('00006', N'³¯³Ç¾Ë', 'ch.chen@test.com', NULL),
-('00007', N'­SÏÉºÕ', 'alex.fan@test.com', 1),
-('00008', N'¶À¤¯¾±', 'jensen.huang@test.com', NULL),
-('00009', N'ªL«T³Ç', 'jj.lin@test.com', NULL),
-('00010', N'¬´ªv­¦', 'tanjiro@test.com', NULL);
+('00001', N'å‘¨èˆˆå“²', 'eric@test.com', 40),  
+('00002', N'æ¥Šä¸ç³', 'rainie@test.com', 2),
+('00003', N'é™³é˜¿è¯', 'hua@test.com', 25),   
+('00004', N'è”¡ä¾æ—', 'lin@test.com', NULL),   
+('00005', N'å‘¨æ°å€«', 'jay@test.com', 14),
+('00006', N'é™³å‚‘æ†²', 'ch.chen@test.com', NULL),
+('00007', N'èŒƒçˆç¦', 'alex.fan@test.com', 1),
+('00008', N'é»ƒä»å‹³', 'jensen.huang@test.com', NULL),
+('00009', N'æ—ä¿Šå‚‘', 'jj.lin@test.com', NULL),
+('00010', N'ç‚­æ²»éƒ', 'tanjiro@test.com', NULL);
 GO
 
 IF OBJECT_ID('UpdateEmployeeSeat', 'P') IS NOT NULL
