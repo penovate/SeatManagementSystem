@@ -53,6 +53,8 @@
 1.  先執行 DDL.sql 產表，建立 SeatDB 及其資料表與索引。
 2.  再執行 DML.sql 匯入測試資料跟預存程序（UpdateEmployeeSeat）。
 
+註：腳本已包含自動重設機制，可重複執行。
+
 ### 2. 後端 Backend
 
 1. 版本須為 Java 21。
