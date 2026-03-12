@@ -58,11 +58,6 @@
 1. 版本須為 Java 21。
 2. 請先修改 src/main/resources/application.properties 裡的資料庫帳密。
 
-```bash
-cd backend
-mvn spring-boot:run
-```
-
 ### 3. 前端 Frontend
 
 環境要求：需安裝 Node.js。
