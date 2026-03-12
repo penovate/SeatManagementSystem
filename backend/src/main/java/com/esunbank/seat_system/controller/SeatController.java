@@ -3,7 +3,6 @@ package com.esunbank.seat_system.controller;
 import com.esunbank.seat_system.entity.Employee;
 import com.esunbank.seat_system.entity.SeatingChart;
 import com.esunbank.seat_system.service.SeatService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

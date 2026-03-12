@@ -3,10 +3,14 @@ import { ref, onMounted, watch } from 'vue'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 
-const seats = ref([])        
-const employees = ref([])    
-const selectedSeat = ref(null) 
-const selectedEmpId = ref('')  
+const seats = ref([])
+const employees = ref([])
+const selectedSeat = ref(null)
+const selectedEmpId = ref('')
+
+const E_SUN_GREEN = '#00948b';
+const E_SUN_GRAY = '#7f8c8d';
+const E_SUN_DANGER = '#ff4757';
 
 const fetchData = async () => {
   try {
@@ -15,7 +19,12 @@ const fetchData = async () => {
     seats.value = seatRes.data
     employees.value = empRes.data
   } catch (error) {
-    Swal.fire('錯誤', '無法連接後端伺服器', 'error')
+    Swal.fire({
+      title: '錯誤',
+      text: '無法連接後端伺服器',
+      icon: 'error',
+      confirmButtonColor: E_SUN_GREEN
+    })
   }
 }
 
@@ -40,8 +49,8 @@ const handleSeatClick = (seat) => {
       text: `確定要移除 「${occupant.name}（${occupant.empId}）」的位置嗎？`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#ff4757',
-      cancelButtonColor: '#7f8c8d',
+      confirmButtonColor: E_SUN_DANGER,
+      cancelButtonColor: E_SUN_GRAY,
       confirmButtonText: '移除',
       cancelButtonText: '取消'
     }).then((result) => {
@@ -57,12 +66,13 @@ const handleSeatClick = (seat) => {
       title: '請先選擇員工',
       text: '您必須先從左側下拉選單選擇一位員工，才能安排座位！',
       icon: 'info',
+      confirmButtonColor: E_SUN_GREEN,
       confirmButtonText: '返回'
     })
     return
   }
 
-  selectedSeat.value = seat 
+  selectedSeat.value = seat
 }
 
 const submitUpdate = () => {
@@ -73,8 +83,8 @@ const submitUpdate = () => {
     html: `確定要把 <b>${selectedSeat.value.floorNo}F - ${selectedSeat.value.seatNo} 號位</b><br>安排給 <b>${targetEmp.name}（ID：${targetEmp.empId}）</b> 嗎？`,
     icon: 'question',
     showCancelButton: true,
-    confirmButtonColor: '#2ed573',
-    cancelButtonColor: '#7f8c8d',
+    confirmButtonColor: E_SUN_GREEN,
+    cancelButtonColor: E_SUN_GRAY,
     confirmButtonText: '確定',
     cancelButtonText: '取消'
   }).then((result) => {
@@ -102,7 +112,12 @@ const executeApiUpdate = async (empId, seatSeq) => {
     selectedEmpId.value = ''
     fetchData()
   } catch (error) {
-    Swal.fire('失敗', '資料更新出現錯誤', 'error')
+    Swal.fire({
+      title: '失敗',
+      text: '資料更新出現錯誤',
+      icon: 'error',
+      confirmButtonColor: E_SUN_GREEN
+    })
   }
 }
 
@@ -192,130 +207,222 @@ onMounted(() => {
 .app-wrapper {
   display: flex;
   min-height: 100vh;
-  background-color: #f1f2f6;
+  background-color: #f4f7f6; 
   font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
 }
 
 .sidebar {
   width: 260px;
-  background: white;
+  background: #ffffff;
   padding: 25px;
-  box-shadow: 2px 0 15px rgba(0,0,0,0.05);
+  box-shadow: 2px 0 15px rgba(0,0,0,0.03);
   position: sticky;
   top: 0;
   height: 100vh;
   flex-shrink: 0;
+  border-right: 1px solid #e0e6e5;
 }
 
-.brand h2 { color: #2f3542; font-size: 1.6rem; margin-bottom: 0; }
-.brand p { color: #a4b0be; font-size: 0.8rem; margin-bottom: 30px; }
+.brand h2 {
+  color: #00948b;
+  font-size: 1.6rem;
+  margin-bottom: 0;
+  font-weight: bold;
+}
+
+.brand p {
+  color: #7f8c8d;
+  font-size: 0.8rem;
+  margin-bottom: 30px;
+  letter-spacing: 1px;
+}
 
 .modern-select {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ced4da;
-  border-radius: 8px;
+  border: 1px solid #d1d8d7;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  outline-color: #00948b;
+}
+
+.selection-status {
   margin-bottom: 20px;
 }
 
-.selection-status { margin-bottom: 20px; }
 .status-badge {
-  background: #e8f0fe;
-  color: #1a73e8;
+  background: #e6f4f3;
+  color: #00948b;
   padding: 10px;
   border-radius: 6px;
   font-weight: bold;
   text-align: center;
+  border: 1px solid #b8dcd8;
 }
 
 .primary-btn {
   width: 100%;
-  background: #2f3542;
+  background: #00948b;
   color: white;
   border: none;
   padding: 12px;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
-  transition: all 0.2s;
+  transition: all 0.3s;
 }
-.primary-btn:hover:not(:disabled) { background: #57606f; }
-.primary-btn:disabled { background: #dfe4ea; cursor: not-allowed; }
 
-.divider { height: 1px; background: #eee; margin: 25px 0; }
+.primary-btn:hover:not(:disabled) {
+  background: #007a72;
+}
 
-.legend-panel { margin-top: 20px; font-size: 0.85rem; }
-.legend-item { display: flex; align-items: center; margin-bottom: 8px; }
-.dot { width: 10px; height: 10px; border-radius: 50%; margin-right: 10px; }
-.dot.empty { background: #dcdde1; }
-.dot.occupied { background: #ff4757; }
-.dot.selected { background: #2ed573; }
+.primary-btn:disabled {
+  background: #ced6d5;
+  cursor: not-allowed;
+}
+
+.divider {
+  height: 1px;
+  background: #e0e6e5;
+  margin: 25px 0;
+}
+
+.legend-panel {
+  margin-top: 20px;
+  font-size: 0.85rem;
+  color: #57606f;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  margin-right: 10px;
+}
+
+.dot.empty {
+  background: #ffffff;
+  border: 1px solid #d1d8d7;
+}
+
+.dot.occupied {
+  background: #718093;
+  border: 1px solid #718093;
+}
+
+.dot.selected {
+  background: #00948b;
+}
 
 .main-content {
   flex: 1;
-  padding: 30px;
+  padding: 40px;
 }
 
 .floor-section {
   background: white;
-  border-radius: 15px;
-  padding: 20px;
-  margin-bottom: 30px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 35px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.04);
 }
 
 .floor-header {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: bold;
-  color: #57606f;
-  margin-bottom: 15px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid #f1f2f6;
+  color: #2f3542;
+  margin-bottom: 20px;
+  padding-left: 10px;
+  border-left: 5px solid #00948b;
 }
 
 .seat-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 15px;
+  gap: 20px;
 }
 
 .seat-tile {
-  background: #f8f9fa;
-  border-radius: 12px;
-  padding: 15px 10px;
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 18px 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 1px solid #eee;
+  border: 1px solid #e0e6e5;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease-in-out;
 }
 
 .seat-tile:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border-color: #00948b;
+  background-color: #f0f9f8;
 }
 
-.seat-info .label { font-size: 0.6rem; color: #a4b0be; display: block; text-align: center; }
-.seat-info .number { font-size: 1.4rem; font-weight: bold; color: #2f3542; }
+.seat-info .label {
+  font-size: 0.65rem;
+  color: #95a5a6;
+  display: block;
+  text-align: center;
+}
+
+.seat-info .number {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
 
 .occupant-info {
-  margin-top: 8px;
+  margin-top: 10px;
   text-align: center;
   width: 100%;
 }
-.occupant-info.preview {
-  opacity: 0.9;
-  font-style: italic;
+
+.occ-id {
+  font-size: 0.7rem;
+  color: #7f8c8d;
 }
-.occ-id { font-size: 0.65rem; color: #747d8c; font-weight: bold; }
-.occ-name { font-size: 0.85rem; color: #2f3542; font-weight: 500; }
 
-.seat-tile.is-occupied { background: #ff4757; border-color: #ff4757; color: white; }
-.seat-tile.is-occupied .label, .seat-tile.is-occupied .number, 
-.seat-tile.is-occupied .occ-id, .seat-tile.is-occupied .occ-name { color: white; }
+.occ-name {
+  font-size: 0.9rem;
+  color: #2c3e50;
+  font-weight: 600;
+}
 
-.seat-tile.is-selected { background: #2ed573; border-color: #2ed573; color: white; }
-.seat-tile.is-selected .label, .seat-tile.is-selected .number,
-.seat-tile.is-selected .occ-id, .seat-tile.is-selected .occ-name { color: white; }
+.seat-tile.is-occupied { 
+  background: #718093; 
+  border-color: #57606f; 
+  cursor: pointer; 
+}
+
+.seat-tile.is-occupied .label, 
+.seat-tile.is-occupied .number, 
+.seat-tile.is-occupied .occ-id, 
+.seat-tile.is-occupied .occ-name { 
+  color: #ffffff !important; 
+}
+
+.seat-tile.is-selected { 
+  background: #00948b; 
+  border-color: #00948b; 
+  box-shadow: 0 4px 12px rgba(0,148,139,0.3);
+}
+
+.seat-tile.is-selected .label, 
+.seat-tile.is-selected .number, 
+.seat-tile.is-selected .occ-id, 
+.seat-tile.is-selected .occ-name { 
+  color: #ffffff !important; 
+}
+
+.occupant-info.preview {
+  color: #00948b;
+  font-style: normal;
+}
 </style>

@@ -5,7 +5,6 @@ import com.esunbank.seat_system.entity.SeatingChart;
 import com.esunbank.seat_system.repository.EmployeeRepository;
 import com.esunbank.seat_system.repository.SeatingChartRepository;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
