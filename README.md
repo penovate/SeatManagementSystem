@@ -4,71 +4,66 @@
 
 ---
 
-## ✨ 核心功能
+## 主要功能
 
-### 1. 樓層地圖視覺化
+### 1. 視覺化座位圖
 
-系統動態渲染各樓層座位分布，並透過色彩直觀標示狀態：
+分樓層顯示，用顏色區分狀態。
 
-- <kbd>灰色</kbd> **空位**：目前無人佔用，點擊即可選取。
-- <kbd>紅色</kbd> **已佔用**：顯示該位置員工編號與姓名，點擊可進行釋放。
-- <kbd>亮綠色</kbd> **已選擇**：選取員工後的即時預覽狀態，確保安排正確。
+- 白色/空位：沒人坐，點擊可以選擇。
+- 深灰色：有人坐了，點擊可以彈出視窗釋放座位。
+- 玉山綠：選中位置後的預覽顏色。
 
-### 2. 座位調整與智慧預覽
+### 2. 座位分配邏輯
 
-- **精準選取**：支援下拉選單篩選 5 碼固定員編之員工。
-- **即時反饋**：點擊空位後，座位上立即顯示預計安排之「姓名與編號」，提供預覽感。
-- **快速釋放**：點擊已佔用座位，即可觸發釋放流程，恢復為空位狀態。
+- 支援下拉選單篩選 5 碼固定員編之員工。
+- 點擊空位會先顯示預覽資訊（員工姓名與編號）。
+- 自動處理「換位子」。如果員工原本有位子，換新位子時舊位子會自動清空。
 
-### 3. 嚴謹的互動機制
+### 3. 防錯機制
 
-- **防呆彈窗**：整合 `SweetAlert2` 實作二次確認邏輯，避免任何誤操作。
-- **業務約束**：系統層級限制每位員工僅能佔用單一座位，自動處理「搬家」與「舊位釋放」。
-
----
-
-## 🛠️ 技術架構
-
-| 層級                  | 技術棧                                              |
-| :-------------------- | :-------------------------------------------------- |
-| **前端 (Frontend)**   | Vue.js, Vite, Axios, SweetAlert2                    |
-| **後端 (Backend)**    | Java 21, Spring Boot, Spring Data JPA (RESTful API) |
-| **資料庫 (Database)** | Microsoft SQL Server                                |
-| **建構工具**          | Maven, NPM                                          |
+- 使用 SweetAlert2 做確認彈窗，避免點錯直接改到資料。
 
 ---
 
-## 🛡️ 安全性與技術亮點
+## 技術架構
 
-- **Transaction 交易管理**：
-  透過 Spring `@Transactional` 結合資料庫 **Stored Procedure**，確保「釋放舊位」與「佔用新位」在同一個事務中完成，保證資料一致性。
-- **預防 SQL Injection**：
-  全系統拒絕字串拼接，完全採用 **Prepared Statements** 與參數化 Stored Procedure 存取資料。
-- **預防 XSS 攻擊**：
-  利用 Vue 內建的模板自動轉義機制處理輸出，並於後端進行嚴格的資料格式校驗。
-- **效能優化**：
-  資料庫實作條件式 **Unique Index**，在 DB 層級加強資料正確性並優化查詢效能。
+- 前端：Vue 3 (Vite), Axios, SweetAlert2
+- 後端：Java 21, Spring Boot, Spring Data JPA
+- 資料庫：MS SQL Server
+- 管理工具：Maven, NPM
 
 ---
 
-## 📦 快速啟動指南
+## 技術重點
 
-### 1. 資料庫建置
+- 預存程序 (Stored Procedure)：核心的座位異動邏輯寫在 SQL 的 UpdateEmployeeSeat 裡，透過 Transaction 確保「清空舊位」跟「佔用新位」是一起完成的。
+- 資料安全（後端）：後端不使用字串拼接，全部走參數化查詢。
+- 資料安全（前端）：前端利用 Vue 內建機制處理 XSS。
+- 資料一致性：在資料庫層級有設定關聯約束，確保資料正確。
 
-請至 `/DB` 資料夾下，依序執行腳本：
+---
 
-1.  執行 `DDL.sql`：建立 `SeatDB` 及其資料表與索引。
-2.  執行 `DML.sql`：插入初始化測試資料並建立 `UpdateEmployeeSeat` 預儲程序。
+## 如何跑起來
 
-### 2. 後端啟動 (Backend)
+### 1. 資料庫 DB
+
+進到 /DB 資料夾：
+
+1.  先執行 DDL.sql 產表，建立 SeatDB 及其資料表與索引。
+2.  再執行 DML.sql 匯入測試資料跟預存程序（UpdateEmployeeSeat）。
+
+### 2. 後端 Backend
+
+1. 版本須為 Java 21。
+2. 請先修改 src/main/resources/application.properties 裡的資料庫帳密。
 
 ```bash
 cd backend
-# 請先於 src/main/resources/application.properties 修改資料庫連線資訊
 mvn spring-boot:run
 ```
 
-### 3. 前端啟動 (Frontend)
+### 3. 前端 Frontend
 
 環境要求：需安裝 Node.js。
 
@@ -80,7 +75,7 @@ npm run dev
 
 > 預設訪問地址：http://localhost:5173
 
-## 📂 目錄結構說明
+## 📂 檔案結構
 
 ```plaintext
 SeatManagementSystem/
@@ -93,7 +88,7 @@ SeatManagementSystem/
 
 ### Java 版本校驗
 
-由於本系統利用了 **Java 21** 的特性，請在執行前確認 `backend/pom.xml` 中的配置是否如下：
+由於本系統利用了 **Java 21** 的特性，請在執行前確認 pom.xml 中的配置是否如下：
 
 ```xml
 <properties>
