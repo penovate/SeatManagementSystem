@@ -75,7 +75,7 @@ npm run dev
 
 > 預設訪問地址：http://localhost:5173
 
-## 📂 檔案結構
+## 檔案結構
 
 ```plaintext
 SeatManagementSystem/
@@ -84,7 +84,7 @@ SeatManagementSystem/
 └── DB/         # 資料庫定義與初始化腳本 (DDL/DML)
 ```
 
-## 💡 環境版本檢查
+## 環境版本檢查
 
 ### Java 版本校驗
 
