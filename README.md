@@ -59,6 +59,7 @@
 
 1. 版本須為 Java 21。
 2. 請先修改 src/main/resources/application.properties 裡的資料庫帳密。
+3. 直接運行 SeatSystemApplication.java 中的 main 方法即可啟動服務。
 
 ### 3. 前端 Frontend
 
